@@ -91,14 +91,6 @@ public class UI {
         this.labelHp = labelHp;
     }
 
-    public JLabel getLabelHpCount() {
-        return labelHpCount;
-    }
-
-    public void setLabelHpCount(JLabel labelHpCount) {
-        this.labelHpCount = labelHpCount;
-    }
-
     public JLabel getLabelWeapon() {
         return labelWeapon;
     }
@@ -107,60 +99,12 @@ public class UI {
         this.labelWeapon = labelWeapon;
     }
 
-    public JLabel getLabelWeaponName() {
-        return labelWeaponName;
-    }
-
-    public void setLabelWeaponName(JLabel labelWeaponName) {
-        this.labelWeaponName = labelWeaponName;
-    }
-
     public JButton getStartButton() {
         return startButton;
     }
 
     public void setStartButton(JButton startButton) {
         this.startButton = startButton;
-    }
-
-    public JButton getChoice1() {
-        return choice1;
-    }
-
-    public void setChoice1(JButton choice1) {
-        this.choice1 = choice1;
-    }
-
-    public JButton getChoice2() {
-        return choice2;
-    }
-
-    public void setChoice2(JButton choice2) {
-        this.choice2 = choice2;
-    }
-
-    public JButton getChoice3() {
-        return choice3;
-    }
-
-    public void setChoice3(JButton choice3) {
-        this.choice3 = choice3;
-    }
-
-    public JButton getChoice4() {
-        return choice4;
-    }
-
-    public void setChoice4(JButton choice4) {
-        this.choice4 = choice4;
-    }
-
-    public JTextArea getMainTextArea() {
-        return mainTextArea;
-    }
-
-    public void setMainTextArea(JTextArea mainTextArea) {
-        this.mainTextArea = mainTextArea;
     }
 
     public Font getFontTitle() {
@@ -294,15 +238,30 @@ public class UI {
     }
 
     public void setLabelDefaultText(String hpText, String weaponName) {
-        getLabelHpCount().setText(hpText);
-        getLabelWeaponName().setText(weaponName);
+        setLabelHpCountText(hpText);
+        setLabelWeaponName(weaponName);
     }
 
-    public void setTurnText(String mainTextArea, String choice1, String choice2, String choice3, String choice4) {
-        getMainTextArea().setText(mainTextArea);
-        getChoice1().setText(choice1);
-        getChoice2().setText(choice2);
-        getChoice3().setText(choice3);
-        getChoice4().setText(choice4);
+    public void setLabelWeaponName(String weaponName){
+        labelWeaponName.setText(weaponName);
+    }
+
+    public void setLabelHpCountText(String hpText){
+        labelHpCount.setText(hpText);
+    }
+
+    public void setTurnText(String mainTextAreaText, String choice1Text, String choice2Text, String choice3Text, String choice4Text) {
+        mainTextArea.setText(mainTextAreaText);
+        choice1.setText(choice1Text);
+        choice2.setText(choice2Text);
+        choice3.setText(choice3Text);
+        choice4.setText(choice4Text);
+    }
+
+    public void hideChoices(){
+        choice1.setVisible(false);
+        choice2.setVisible(false);
+        choice3.setVisible(false);
+        choice4.setVisible(false);
     }
 }

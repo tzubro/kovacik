@@ -5,16 +5,7 @@ public class ScreenManager {
     private UI ui;
 
     public ScreenManager(UI uInterface) {
-
         ui = uInterface;
-    }
-
-    public UI getUi() {
-        return ui;
-    }
-
-    public void setUi(UI ui) {
-        this.ui = ui;
     }
 
     public void showGameScreen() {
