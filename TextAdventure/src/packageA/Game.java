@@ -17,13 +17,15 @@ public class Game {
     private String nextPosition4;
 
     public void start(){
-        ui.createUI(choiceHandler);
-        story.defaultSetting();
-        screenManager.showTitleScreen();
         choiceHandler = new ChoiceHandler();
         ui = new UI();
         screenManager = new ScreenManager(ui);
         story = new Story(this, ui, screenManager);
+//        ui.createUI(choiceHandler);
+        ui.createMainScreen(choiceHandler);
+        ui.createGameScreen(choiceHandler);
+        story.defaultSetting();
+        ui.showMainScreen();
     }
 
     public static void main(String[] args) {
@@ -38,7 +40,7 @@ public class Game {
 
             switch (yourTurn) {
                 case "Start":
-                    screenManager.showGameScreen();
+                    ui.showGameScreen();
                     story.castleGate();
                     break;
                 case "turn1":

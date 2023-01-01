@@ -204,7 +204,7 @@ public class Story {
                 "",
                 "",
                 "");
-        ui.hideChoices();
+        ui.changeChoiceButtonVisibility(false);
     }
 
     public void backToTitleScreen() {
