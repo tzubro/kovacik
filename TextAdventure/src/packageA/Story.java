@@ -5,66 +5,27 @@ import packageB.Weapon_LongSword;
 import packageB.Monster;
 import packageB.Monster_Sauron;
 import packageB.Monster_Dragon;
+
+import java.util.Random;
+
 public class Story {
 
     private Game game;
     private UI ui;
     private ScreenManager screenManager;
     private Monster monster;
-    int goldenRing = 0;
-
-    private Player player = new Player();
+    private int goldenRing;
+    private Player player;
 
 
     public Story(Game g, UI uInterface, ScreenManager sManager) {
-
         game = g;
         ui = uInterface;
         screenManager = sManager;
+        player = new Player();
     }
 
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    public UI getUi() {
-        return ui;
-    }
-
-    public void setUi(UI ui) {
-        this.ui = ui;
-    }
-
-    public ScreenManager getScreenManager() {
-        return screenManager;
-    }
-
-    public void setScreenManager(ScreenManager screenManager) {
-        this.screenManager = screenManager;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public Monster getMonster() {
-        return monster;
-    }
-
-    public void setMonster(Monster monster) {
-        this.monster = monster;
-    }
-
-
-    //nastavi hracovi zivoty a zbran
+     //nastavi hracovi zivoty a zbran
     public void defaultSetting() {
         player.setHp(10);
         player.setCurrentWeapon(new Weapon_Knife());
@@ -99,10 +60,7 @@ public class Story {
                 "Attack the guard",
                 "Escape guard",
                 "");
-        game.setNextPosition1("talkGuard");
-        game.setNextPosition2("attackGuard");
-        game.setNextPosition3("crossRoadOfPaths");
-        game.setNextPosition4("");
+        game.setNextPosition("talkGuard", "attackGuard", "crossRoadOfPaths", "");
     }
 
 
@@ -121,65 +79,45 @@ public class Story {
 
 
     public void attackGuard() {
-        ui.getMainTextArea().setText("Guard: See, what you've done?\n\nThe guard fought you back and hit you hard.\n(You receive 3 damage points)");
         player.setHp(player.getHp() - 3);
-        ui.getLabelHpCount().setText("" + player.getHp());
-        ui.getChoice1().setText(">");
-        ui.getChoice2().setText("");
-        ui.getChoice3().setText("");
-        ui.getChoice4().setText("");
-
-        game.setNextPosition1("castleGate");
-        game.setNextPosition2("");
-        game.setNextPosition3("");
-        game.setNextPosition4("");
+        ui.setLabelHpCountText("" + player.getHp());
+        ui.setTurnText("Guard: See, what you've done?\\n\\nThe guard fought you back and hit you hard.\\n(You receive 3 damage points)",
+                ">", "", "", "");
+        game.setNextPosition("castleGate", "", "", "");
     }
 
     public void crossRoadOfPaths() {
-        ui.getMainTextArea().setText("You're at the crossing of 4 paths.\nIf you go south, you'll go back to the \ncastle");
-        ui.getChoice1().setText("Go east");
-        ui.getChoice2().setText("Go west");
-        ui.getChoice3().setText("Go south");
-        ui.getChoice4().setText("Go north");
+        ui.setTurnText("You're at the crossing of 4 paths.\nIf you go south, you'll go back to the \ncastle",
+                "Go east",
+                "Go west",
+                "Go south",
+                "Go north");
 
-        game.setNextPosition1("east");
-        game.setNextPosition2("west");
-        game.setNextPosition3("castleGate");
-        game.setNextPosition4("north");
+        game.setNextPosition("east", "west", "castleGate", "north");
     }
 
     public void east() {
-        ui.getMainTextArea().setText("There's a river. \nDrink the water and rest at the \nriverside. \n\n(Your HP are recovered by 2)");
-
         player.setHp(player.getHp() + 2);
-        ui.getLabelHpCount().setText("" + player.getHp());
+        ui.setLabelHpCountText("" + player.getHp());
+        ui.setTurnText("There's a river. \nDrink the water and rest at the \nriverside. \n\n(Your HP are recovered by 2)",
+                "Go west",
+                "",
+                "",
+                "");
 
-        ui.getChoice1().setText("Go west");
-        ui.getChoice2().setText("");
-        ui.getChoice3().setText("");
-        ui.getChoice4().setText("");
-
-        game.setNextPosition1("crossRoadOfPaths");
-        game.setNextPosition2("");
-        game.setNextPosition3("");
-        game.setNextPosition4("");
+        game.setNextPosition("crossRoadOfPaths", "", "", "");
     }
 
     public void west() {
-        ui.getMainTextArea().setText("You've walked into a forest and found a \nlong sword!\n\n(You've obtained a long sword)");
-
         player.setCurrentWeapon(new Weapon_LongSword());
-        ui.getLabelWeaponName().setText(player.getCurrentWeapon().getName());
+        ui.setLabelWeaponName(player.getCurrentWeapon().getName());
+        ui.setTurnText("You've walked into a forest and found a \nlong sword!\n\n(You've obtained a long sword)",
+                "Go south",
+                "",
+                "",
+                "");
 
-        ui.getChoice1().setText("Go south");
-        ui.getChoice2().setText("");
-        ui.getChoice3().setText("");
-        ui.getChoice4().setText("");
-
-        game.setNextPosition1("crossRoadOfPaths");
-        game.setNextPosition2("");
-        game.setNextPosition3("");
-        game.setNextPosition4("");
+        game.setNextPosition("crossRoadOfPaths", "", "", "");
     }
 
 
@@ -191,30 +129,24 @@ public class Story {
         } else {
             monster = new Monster_Dragon();
         }
+        ui.setTurnText("You encountered a \" + monster.getName() + !",
+                "Fight",
+                "Run",
+                "",
+                "");
 
-        ui.getMainTextArea().setText("You encountered a " + monster.getName() + "!");
-        ui.getChoice1().setText("Fight");
-        ui.getChoice2().setText("Run");
-        ui.getChoice3().setText("");
-        ui.getChoice4().setText("");
+        game.setNextPosition("fight", "crossRoadOfPaths", "", "");
 
-        game.setNextPosition1("fight");
-        game.setNextPosition2("crossRoadOfPaths");
-        game.setNextPosition3("");
-        game.setNextPosition4("");
     }
 
     public void fight() {
-        ui.getMainTextArea().setText(monster.getName() + ": " + monster.getHp() + "\n\nWhat do you do?");
-        ui.getChoice1().setText("Attack");
-        ui.getChoice2().setText("Run");
-        ui.getChoice3().setText("");
-        ui.getChoice4().setText("");
+        ui.setTurnText(monster.getName() + ": " + monster.getHp() + "\n\nWhat do you do?",
+                "Attack",
+                "Run",
+                "",
+                "");
 
-        game.setNextPosition1("attackOfPlayer");
-        game.setNextPosition2("crossRoadOfPaths");
-        game.setNextPosition3("");
-        game.setNextPosition4("");
+        game.setNextPosition("attackOfPlayer", "crossRoadOfPaths", "", "");
     }
 
     public void attackOfPlayer() {
@@ -222,84 +154,57 @@ public class Story {
         int playerDamage = 0;
 
         playerDamage = new java.util.Random().nextInt(player.getCurrentWeapon().getDamage()); //generuje nahodne poskodenie sposobene hracom
-
-        ui.getMainTextArea().setText("You've attacked the monster and \ngave " + playerDamage + " damage!");
-
         monster.setHp(monster.getHp() - playerDamage);
-
-        ui.getChoice1().setText(">");
-        ui.getChoice2().setText("");
-        ui.getChoice3().setText("");
-        ui.getChoice4().setText("");
+        ui.setTurnText("You've attacked the monster and \ngave " + playerDamage + " damage!",
+                ">",
+                "",
+                "",
+                "");
 
         if (monster.getHp() > 0) {
-            game.setNextPosition1("monsterAttack");
-            game.setNextPosition2("");
-            game.setNextPosition3("");
-            game.setNextPosition4("");
+            game.setNextPosition("monsterAttack", "", "", "");
         } else if (monster.getHp() <= 0) {
-            game.setNextPosition1("win");
-            game.setNextPosition2("");
-            game.setNextPosition3("");
-            game.setNextPosition4("");
+            game.setNextPosition("win", "", "", "");
         }
     }
 
     public void attackOfMonster() {
         int monsterDamage = 0;
 
-        monsterDamage = new java.util.Random().nextInt(monster.getAttack()); //generuje nahodne poskodenie sposobene monstrom
-
-        ui.getMainTextArea().setText(monster.getAttackMessage() + "\nYou've received " + monsterDamage + " damage!");
+        monsterDamage = new Random().nextInt(monster.getAttack()); //generuje nahodne poskodenie sposobene monstrom
 
         player.setHp(player.getHp() - monsterDamage);
-        ui.getLabelHpCount().setText("" + player.getHp());
-
-        ui.getChoice1().setText(">");
-        ui.getChoice2().setText("");
-        ui.getChoice3().setText("");
-        ui.getChoice4().setText("");
+        ui.setLabelHpCountText("" + player.getHp());
+        ui.setTurnText(monster.getAttackMessage() + "\nYou've received " + monsterDamage + " damage!",
+                ">",
+                "",
+                "",
+                "");
 
         if (player.getHp() > 0) {
-            game.setNextPosition1("fight");
-            game.setNextPosition2("");
-            game.setNextPosition3("");
-            game.setNextPosition4("");
+            game.setNextPosition("fight", "", "", "");
         } else if (player.getHp() <= 0) {
-            game.setNextPosition1("lose");
-            game.setNextPosition2("");
-            game.setNextPosition3("");
-            game.setNextPosition4("");
+            game.setNextPosition("lose", "", "", "");
         }
     }
 
     public void win() {
-        ui.getMainTextArea().setText("You've defeated the monster!\nIt has dropped a ring!\n\n(You've obtained a Golden Ring)");
-
         goldenRing = 1;
-
-        ui.getChoice1().setText("Go north");
-        ui.getChoice2().setText("");
-        ui.getChoice3().setText("");
-        ui.getChoice4().setText("");
-
-        game.setNextPosition1("backToTheTitleScreen");
-        game.setNextPosition2("");
-        game.setNextPosition3("");
-        game.setNextPosition4("");
+        ui.setTurnText("You've defeated the monster!\nIt has dropped a ring!\n\n(You've obtained a Golden Ring)",
+                "Go north",
+                "",
+                "",
+                "");
+        game.setNextPosition("backToTheTitleScreen", "", "", "");
     }
 
     public void ending() {
-        ui.getMainTextArea().setText("Guard: Oh, you've killed that Sauron!?\nI appreciate you! You're the chosen one!\nWelcome to our castle!\n\n<The end>");
-
-        ui.getChoice1().setText("");
-        ui.getChoice2().setText("");
-        ui.getChoice3().setText("");
-        ui.getChoice4().setText("");
-        ui.getChoice1().setVisible(false);
-        ui.getChoice2().setVisible(false);
-        ui.getChoice3().setVisible(false);
-        ui.getChoice4().setVisible(false);
+        ui.setTurnText("Guard: Oh, you've killed that Sauron!?\nI appreciate you! You're the chosen one!\nWelcome to our castle!\n\n<The end>",
+                "",
+                "",
+                "",
+                "");
+        ui.changeChoiceButtonVisibility(false);
     }
 
     public void backToTitleScreen() {
