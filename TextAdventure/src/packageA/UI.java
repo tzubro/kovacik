@@ -1,15 +1,15 @@
 package packageA;
 
-import java.awt.*;
-import java.util.Objects;
 import javax.swing.*;
+import java.awt.*;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static packageA.ActionCommand.*;
 
 public class UI {
+    private final Font fontTitle = new Font("Arial", Font.BOLD, 40);
+    private final Font fontNormal = new Font("Arial", Font.PLAIN, 24);
     private JFrame startWindow;
-
     private JFrame gameWindow;
     private JPanel panelTitleName;
     private JPanel panelStartButton;
@@ -27,10 +27,17 @@ public class UI {
     private JButton choice3;
     private JButton choice4;
     private JTextArea mainTextArea;
-    private Font fontTitle = new Font("Arial", Font.BOLD, 40);
-    private Font fontNormal = new Font("Arial", Font.PLAIN, 24);
 
-    public void createMainScreen(Game.ChoiceHandler choiceHandler){
+    private static GridBagConstraints createGridBagConstraints(int x, int y, int width) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = x;
+        gbc.gridy = y;
+        gbc.gridwidth = width;
+        return gbc;
+    }
+
+    public void createMainScreen(Game.ChoiceHandler choiceHandler) {
         startWindow = new JFrame();
         startWindow.setSize(1800, 1000);
         startWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,7 +55,7 @@ public class UI {
         panelStartButton.setBounds(200, 250, 500, 800);
         panelStartButton.setBackground(Color.orange);
         panelStartButton.setVisible(true);
-        startButton = createButton("Start", Color.orange, choiceHandler, "Start");
+        startButton = createButton(START, Color.orange, choiceHandler);
         panelStartButton.add(startButton);
         startWindow.getContentPane().add(BorderLayout.NORTH, panelTitleName);
         startWindow.getContentPane().add(BorderLayout.CENTER, panelStartButton);
@@ -88,14 +95,14 @@ public class UI {
         panelChoiceButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         panelChoiceButton.setPreferredSize(new Dimension(385, 450));
 
-        gameWindow.getContentPane().add(panelChoiceButton, createGridBagConstraints(0,1, 1));
-        choice1 = createButton("1st choice", Color.orange, choiceHandler, "turn1");
+        gameWindow.getContentPane().add(panelChoiceButton, createGridBagConstraints(0, 1, 1));
+        choice1 = createButton(TURN_1, Color.orange, choiceHandler);
         panelChoiceButton.add(choice1);
-        choice2 = createButton("2nd choice", Color.gray, choiceHandler, "turn2");
+        choice2 = createButton(TURN_2, Color.gray, choiceHandler);
         panelChoiceButton.add(choice2);
-        choice3 = createButton("3rd choice", Color.gray, choiceHandler, "turn3");
+        choice3 = createButton(TURN_3, Color.gray, choiceHandler);
         panelChoiceButton.add(choice3);
-        choice4 = createButton("4th choice", Color.gray, choiceHandler, "turn4");
+        choice4 = createButton(TURN_4, Color.gray, choiceHandler);
         panelChoiceButton.add(choice4);
         panelPlayer = new JPanel();
         panelPlayer.setBounds(100, 25, 525, 60);
@@ -105,44 +112,35 @@ public class UI {
         gameWindow.getContentPane().add(panelPlayer, createGridBagConstraints(1, 1, 1));
         labelHp = createLabel("HP:", Color.white, null);
         panelPlayer.add(labelHp);
-        labelHpCount = createLabel("HP:", Color.white, null);
+        labelHpCount = createLabel("", Color.white, null);
         panelPlayer.add(labelHpCount);
-        labelWeapon = createLabel("HP:", Color.white, null);
+        labelWeapon = createLabel("Weapon:", Color.white, null);
         panelPlayer.add(labelWeapon);
-        labelWeaponName = createLabel("HP:", Color.white, null);
+        labelWeaponName = createLabel("", Color.white, null);
         panelPlayer.add(labelWeaponName);
     }
 
     private JLabel createLabel(String name, Color foregroundColor, Color backgroundColor) {
         JLabel label = new JLabel();
-        if (nonNull(name)){
+        if (nonNull(name)) {
             label = new JLabel("HP: ");
         }
         label.setFont(fontNormal);
         label.setForeground(Color.white);
-        if (nonNull(backgroundColor)){
+        if (nonNull(backgroundColor)) {
             label.setBackground(backgroundColor);
         }
         return label;
     }
 
-    private static GridBagConstraints createGridBagConstraints(int x, int y, int width) {
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = x;
-        gbc.gridy = y;
-        gbc.gridwidth = width;
-        return gbc;
-    }
-
-    private JButton createButton(String text, Color gray, Game.ChoiceHandler choiceHandler, String command) {
-        JButton button = new JButton(text);
+    private JButton createButton(ActionCommand command, Color gray, Game.ChoiceHandler choiceHandler) {
+        JButton button = new JButton(command.getTitle());
         button.setBackground(gray);
         button.setForeground(Color.white);
         button.setFont(fontNormal);
         button.setFocusPainted(false);
         button.addActionListener(choiceHandler);
-        button.setActionCommand(command);
+        button.setActionCommand(command.name());
         button.setVisible(true);
         return button;
     }
@@ -152,11 +150,11 @@ public class UI {
         setLabelWeaponName(weaponName);
     }
 
-    public void setLabelWeaponName(String weaponName){
+    public void setLabelWeaponName(String weaponName) {
         labelWeaponName.setText(weaponName);
     }
 
-    public void setLabelHpCountText(String hpText){
+    public void setLabelHpCountText(String hpText) {
         labelHpCount.setText(hpText);
     }
 
@@ -168,19 +166,19 @@ public class UI {
         choice4.setText(choice4Text);
     }
 
-    public void changeChoiceButtonVisibility(boolean visibility){
+    public void changeChoiceButtonVisibility(boolean visibility) {
         choice1.setVisible(visibility);
         choice2.setVisible(visibility);
         choice3.setVisible(visibility);
         choice4.setVisible(visibility);
     }
 
-    public void showGameScreen(){
+    public void showGameScreen() {
         startWindow.setVisible(false);
         gameWindow.setVisible(true);
     }
 
-    public void showMainScreen(){
+    public void showMainScreen() {
         gameWindow.setVisible(false);
         startWindow.setVisible(true);
     }

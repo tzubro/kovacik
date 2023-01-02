@@ -2,11 +2,13 @@ package packageA;
 
 public class ScreenManager {
 
-    private UI ui;
+    private final Story story;
 
-    public ScreenManager(UI uInterface) {
-        ui = uInterface;
+
+    public ScreenManager(UI uInterface, Story story) {
+        this.story = story;
     }
+
 
     public void showGameScreen() {
 

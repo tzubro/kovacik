@@ -1,57 +1,104 @@
 package packageA;
 
-import packageB.Weapon_Knife;
-import packageB.Weapon_LongSword;
-import packageB.Monster;
-import packageB.Monster_Sauron;
-import packageB.Monster_Dragon;
+import packageB.*;
 
 import java.util.Random;
 
 public class Story {
 
-    private Game game;
-    private UI ui;
-    private ScreenManager screenManager;
+    private final Game game;
+    private final UI ui;
+    private final Player player;
     private Monster monster;
     private int goldenRing;
-    private Player player;
 
+    private String nextPosition1;
+    private String nextPosition2;
+    private String nextPosition3;
+    private String nextPosition4;
 
-    public Story(Game g, UI uInterface, ScreenManager sManager) {
+    public Story(Game g, UI uInterface) {
         game = g;
         ui = uInterface;
-        screenManager = sManager;
         player = new Player();
     }
 
-     //nastavi hracovi zivoty a zbran
-    public void defaultSetting() {
-        player.setHp(10);
-        player.setCurrentWeapon(new Weapon_Knife());
-        ui.setLabelDefaultText("" + player.getHp(),player.getCurrentWeapon().getName());
+    public void setNextPosition(String position1, String position2, String position3, String position4) {
+        nextPosition1 = position1;
+        nextPosition2 = position2;
+        nextPosition3 = position3;
+        nextPosition4 = position4;
+    }
 
-        goldenRing = 0;
+    public void selectPosition1() {
+        selectPosition(nextPosition1);
+    }
+
+    public void selectPosition2() {
+        selectPosition(nextPosition2);
+    }
+
+    public void selectPosition3() {
+        selectPosition(nextPosition3);
+    }
+
+    public void selectPosition4() {
+        selectPosition(nextPosition4);
     }
 
     //sluzi na vyber tahu
     public void selectPosition(String nextPosition) {
 
         switch (nextPosition) {
-            case "castleGate": castleGate(); break;
-            case "talkGuard": talkGuard(); break;
-            case "attackGuard": attackGuard(); break;
-            case "crossRoadOfPaths": crossRoadOfPaths(); break;
-            case "north": north(); break;
-            case "west": west(); break;
-            case "east": east(); break;
-            case "fight": fight(); break;
-            case "attackOfPlayer": attackOfPlayer(); break;
-            case "attackOfMonster": attackOfMonster(); break;
-            case "win": win(); break;
-            case "ending": ending(); break;
-            case "backToTitleScreen": backToTitleScreen(); break;
+            case "castleGate":
+                castleGate();
+                break;
+            case "talkGuard":
+                talkGuard();
+                break;
+            case "attackGuard":
+                attackGuard();
+                break;
+            case "crossRoadOfPaths":
+                crossRoadOfPaths();
+                break;
+            case "north":
+                north();
+                break;
+            case "west":
+                west();
+                break;
+            case "east":
+                east();
+                break;
+            case "fight":
+                fight();
+                break;
+            case "attackOfPlayer":
+                attackOfPlayer();
+                break;
+            case "attackOfMonster":
+                attackOfMonster();
+                break;
+            case "win":
+                win();
+                break;
+            case "ending":
+                ending();
+                break;
+            case "backToTitleScreen":
+                backToTitleScreen();
+                break;
         }
+    }
+
+    //nastavi hracovi zivoty a zbran
+    public void defaultSetting() {
+        player.setHp(10);
+        player.setCurrentWeapon(new Weapon_Knife());
+        ui.setLabelDefaultText("" + player.getHp(), player.getCurrentWeapon().getName());
+
+        goldenRing = 0;
     }
 
     public void castleGate() {
@@ -60,7 +107,7 @@ public class Story {
                 "Attack the guard",
                 "Escape guard",
                 "");
-        game.setNextPosition("talkGuard", "attackGuard", "crossRoadOfPaths", "");
+        setNextPosition("talkGuard", "attackGuard", "crossRoadOfPaths", "");
     }
 
 
@@ -70,12 +117,11 @@ public class Story {
                     ">",
                     "", "", "");
 
-            game.setNextPosition("castleGate", "", "", "");
+            setNextPosition("castleGate", "", "", "");
         } else if (goldenRing == 1) { //ak hrac ziskal zlaty prsten, hra konci
             ending();
         }
     }
-
 
 
     public void attackGuard() {
@@ -83,7 +129,7 @@ public class Story {
         ui.setLabelHpCountText("" + player.getHp());
         ui.setTurnText("Guard: See, what you've done?\\n\\nThe guard fought you back and hit you hard.\\n(You receive 3 damage points)",
                 ">", "", "", "");
-        game.setNextPosition("castleGate", "", "", "");
+        setNextPosition("castleGate", "", "", "");
     }
 
     public void crossRoadOfPaths() {
@@ -93,7 +139,7 @@ public class Story {
                 "Go south",
                 "Go north");
 
-        game.setNextPosition("east", "west", "castleGate", "north");
+        setNextPosition("east", "west", "castleGate", "north");
     }
 
     public void east() {
@@ -105,7 +151,7 @@ public class Story {
                 "",
                 "");
 
-        game.setNextPosition("crossRoadOfPaths", "", "", "");
+        setNextPosition("crossRoadOfPaths", "", "", "");
     }
 
     public void west() {
@@ -117,7 +163,7 @@ public class Story {
                 "",
                 "");
 
-        game.setNextPosition("crossRoadOfPaths", "", "", "");
+        setNextPosition("crossRoadOfPaths", "", "", "");
     }
 
 
@@ -135,7 +181,7 @@ public class Story {
                 "",
                 "");
 
-        game.setNextPosition("fight", "crossRoadOfPaths", "", "");
+        setNextPosition("fight", "crossRoadOfPaths", "", "");
 
     }
 
@@ -146,7 +192,7 @@ public class Story {
                 "",
                 "");
 
-        game.setNextPosition("attackOfPlayer", "crossRoadOfPaths", "", "");
+        setNextPosition("attackOfPlayer", "crossRoadOfPaths", "", "");
     }
 
     public void attackOfPlayer() {
@@ -162,9 +208,9 @@ public class Story {
                 "");
 
         if (monster.getHp() > 0) {
-            game.setNextPosition("monsterAttack", "", "", "");
+            setNextPosition("monsterAttack", "", "", "");
         } else if (monster.getHp() <= 0) {
-            game.setNextPosition("win", "", "", "");
+            setNextPosition("win", "", "", "");
         }
     }
 
@@ -182,9 +228,9 @@ public class Story {
                 "");
 
         if (player.getHp() > 0) {
-            game.setNextPosition("fight", "", "", "");
+            setNextPosition("fight", "", "", "");
         } else if (player.getHp() <= 0) {
-            game.setNextPosition("lose", "", "", "");
+            setNextPosition("lose", "", "", "");
         }
     }
 
@@ -195,7 +241,7 @@ public class Story {
                 "",
                 "",
                 "");
-        game.setNextPosition("backToTheTitleScreen", "", "", "");
+        setNextPosition("backToTheTitleScreen", "", "", "");
     }
 
     public void ending() {
@@ -209,6 +255,6 @@ public class Story {
 
     public void backToTitleScreen() {
         defaultSetting();
-        screenManager.showTitleScreen();
+        ui.showMainScreen();
     }
 }
